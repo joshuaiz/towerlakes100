@@ -1,3 +1,5 @@
+import { withUt } from 'uploadthing/tw'
+
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
 
@@ -8,7 +10,7 @@ delete colors['trueGray']
 delete colors['coolGray']
 delete colors['blueGray']
 
-export default {
+export default withUt({
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
 		colors: {
@@ -35,4 +37,4 @@ export default {
 		extend: {},
 	},
 	plugins: [require('daisyui')],
-}
+})

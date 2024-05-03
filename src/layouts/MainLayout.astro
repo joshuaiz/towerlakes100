@@ -1,5 +1,8 @@
 ---
+import '@uploadthing/react/styles.css'
 import '@styles/style.css'
+
+import UploadThingSSR from '@components/Upload/UploadThingSSR.astro'
 import Header from '@components/Header/Header.astro'
 import Footer from '@components/Footer/Footer.astro'
 
@@ -11,9 +14,12 @@ const { title } = Astro.props
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 	</head>
+	<UploadThingSSR />
 	<body>
 		<Header />
 		<slot />
 		<Footer />
 	</body>
+
+
 </html>

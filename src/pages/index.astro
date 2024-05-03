@@ -2,6 +2,7 @@
 import MainLayout from '@layouts/MainLayout.astro'
 import PageWrap from '@layouts/PageWrap.astro'
 import Upload from '@components/Upload/Upload.astro'
+import { ImageUploader } from '@components/Upload/ImageUploader.jsx'
 ---
 
 <MainLayout title="Tower Lakes 100">
@@ -11,8 +12,7 @@ import Upload from '@components/Upload/Upload.astro'
 				<h1 class="font-bold text-3xl lg:text-4xl">Tower Lakes 100</h1>
 			</header>
 			<p>Welcome to the Tower Lakes 100 website.</p>
-
-			<Upload />
+			<ImageUploader client:load />
 		</article>
 	</PageWrap>
 </MainLayout>
