@@ -1,0 +1,16 @@
+---
+const { bg, width, title } = Astro.props
+---
+
+<div id="content" class={`page ${bg} ${width}`}>
+	<main
+		id="main"
+		class="main content-grid"
+		role="main"
+		itemscope
+		itemprop="mainContentOfPage"
+		itemtype="https://schema.org/Blog"
+	>
+		<slot />
+	</main>
+</div>
