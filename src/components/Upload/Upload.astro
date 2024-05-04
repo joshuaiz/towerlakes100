@@ -57,7 +57,7 @@ if (Astro.request.method === 'POST') {
 			formSubmitted = true
 			console.log('Form submitted')
 
-			fetch('/api/sendmail.php', {
+			fetch('/api/resend.ts', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

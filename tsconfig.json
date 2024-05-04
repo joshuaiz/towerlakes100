@@ -5,6 +5,7 @@
         "jsxImportSource": "react",
         "target": "ESNext",
         "allowSyntheticDefaultImports": true,
+        "verbatimModuleSyntax": false,
         "module": "ESNext",
         "baseUrl": ".",
         "esModuleInterop": true,

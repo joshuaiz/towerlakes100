@@ -1,9 +1,10 @@
-import { useState, useEffect, Fragment } from 'react'
+import { FormEvent, useState, useEffect, Fragment } from 'react'
 import { ImageUploader } from './ImageUploader.jsx'
 import { isValidEmail, isValidPhone } from '@utils/utils.js'
 
 const UploadForm = () => {
 	const [formSubmitted, setFormSubmitted] = useState(false)
+	const [responseMessage, setResponseMessage] = useState('')
 	const [errors, setErrors] = useState({
 		firstname: '',
 		lastname: '',
@@ -16,20 +17,27 @@ const UploadForm = () => {
 		setFormSubmitted(false)
 	}, [])
 
-	const submitForm = (e) => {
+	const submitForm = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
-		const firstname = e.target.firstname.value
-		const lastname = e.target.lastname.value
-		const email = e.target.email.value
-		const phone = e.target.phone.value
-		const address = e.target.address.value
-		const address2 = e.target.address2.value
-		const city = e.target.city.value
-		const state = e.target.state.value
-		const zip = e.target.zip.value
-		const submissionType = e.target['submission-type'].value
-		const message = e.target.message.value
+		const formData = new FormData(e.target as HTMLFormElement)
+
+		// formData.forEach((value, key) => {
+		// 	console.log('key', key)
+		// 	console.log('value', value)
+		// })
+
+		const firstname = formData['firstname']
+		const lastname = formData['lastname']
+		const email = formData['email']
+		const phone = formData['phone']
+		const address = formData['address']
+		const address2 = formData['address2']
+		const city = formData['city']
+		const state = formData['state']
+		const zip = formData['zip']
+		const submissionType = formData['submission-type']
+		const message = formData['message']
 
 		if (typeof firstname !== 'string' || firstname.length < 1) {
 			setErrors((prev) => ({
@@ -74,32 +82,20 @@ const UploadForm = () => {
 			setFormSubmitted(true)
 			console.log('Form submitted')
 
-			fetch('./api/sendmail.php', {
+			const response = await fetch('/api/resend', {
 				method: 'POST',
-
-				body: JSON.stringify({
-					firstname,
-					lastname,
-					email,
-					phone,
-					address,
-					address2,
-					city,
-					state,
-					zip,
-					submissionType,
-					message,
-				}),
+				body: formData,
 			})
-				.then((response) => {
-					console.log(response)
-				})
-				.then((data) => {
-					console.log('Success:', data)
-				})
-				.catch((error) => {
-					console.error('Error:', error)
-				})
+			const data = await response.json()
+			if (data.status === 200) {
+				if (data.message) {
+					console.log('form response', data.message)
+					setResponseMessage('Form submitted successfully!')
+					setTimeout(() => {
+						setResponseMessage('')
+					}, 5000)
+				}
+			}
 		}
 	}
 
@@ -163,7 +159,7 @@ const UploadForm = () => {
 					</p>
 					<form
 						method="POST"
-						onSubmit={(e) => submitForm(e)}
+						onSubmit={submitForm}
 						className="flex flex-col"
 					>
 						<div className="form-wrap flex gap-x-4 w-full">
@@ -363,7 +359,10 @@ const UploadForm = () => {
 						</div>
 
 						<div className="form-submit w-full flex flex-col items-center justify-center">
-							<button className="btn bg-carribbean w-full hover:bg-jungle text-lg lg:text-2xl uppercase tracking-wide">
+							<button
+								type="submit"
+								className="btn bg-carribbean w-full hover:bg-jungle text-lg lg:text-2xl uppercase tracking-wide"
+							>
 								Submit Form
 							</button>
 							<p className="text-xs text-slate-green not-prose">
@@ -381,8 +380,9 @@ const UploadForm = () => {
 					}`}
 				>
 					<h2 className="!mt-0 mb-2">Upload Your Files:</h2>
-					<ImageUploader client:load />
+					<ImageUploader />
 				</div>
+				{responseMessage && <p>{responseMessage}</p>}
 			</div>
 		</div>
 	)
