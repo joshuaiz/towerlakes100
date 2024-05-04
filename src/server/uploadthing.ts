@@ -1,4 +1,5 @@
-import { createUploadthing, type FileRouter } from 'uploadthing/server'
+import { createUploadthing, type FileRouter, UTFiles } from 'uploadthing/server'
+import { slugify, generateId } from '@utils/utils.js'
 
 const f = createUploadthing()
 
@@ -7,26 +8,32 @@ const auth = (req: Request) => ({ id: 'fakeId' }) // Fake auth function
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
 	// Define as many FileRoutes as you like, each with a unique routeSlug
-	imageUploader: f({ image: { maxFileSize: '1024MB' } })
+	fileUploader: f({
+		image: { maxFileSize: '1024MB', maxFileCount: 10 },
+		blob: { maxFileSize: '64MB', maxFileCount: 3 },
+		pdf: { maxFileSize: '256MB', maxFileCount: 5 },
+		text: { maxFileSize: '64MB', maxFileCount: 3 },
+	})
 		// Set permissions and file types for this FileRoute
-		.middleware(async ({ req }) => {
+		.middleware(async ({ req, files }) => {
 			// This code runs on your server before upload
-			const user = await auth(req)
+			const fileOverrides = files.map((file) => {
+				const newName = slugify(file.name)
+				const myIdentifier = generateId()
+				return { ...file, name: newName, customId: myIdentifier }
+			})
 
-			// If you throw, the user will not be able to upload
-			if (!user) throw new Error('Unauthorized')
-
-			// Whatever is returned here is accessible in onUploadComplete as `metadata`
-			return { userId: user.id }
+			// Return userId to be used in onUploadComplete
+			return { foo: 'bar' as const, [UTFiles]: fileOverrides }
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
 			// This code RUNS ON YOUR SERVER after upload
-			console.log('Upload complete for userId:', metadata.userId)
+			console.log('metadata', metadata)
 
 			console.log('file url', file.url)
 
 			// !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-			return { uploadedBy: metadata.userId }
+			return { metadata, file: { ...file, customId: file.customId } }
 		}),
 } satisfies FileRouter
 

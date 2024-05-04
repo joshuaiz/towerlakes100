@@ -36,5 +36,9 @@ export default withUt({
 		},
 		extend: {},
 	},
-	plugins: [require('daisyui')],
+	plugins: [
+		require('daisyui'),
+		require('@tailwindcss/typography'),
+		require('@tailwindcss/forms'),
+	],
 })

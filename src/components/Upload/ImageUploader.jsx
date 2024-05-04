@@ -4,7 +4,8 @@ import { UploadButton } from '@utils/uploadthing.ts'
 export function ImageUploader() {
 	return (
 		<UploadDropzone
-			endpoint="imageUploader"
+			endpoint="fileUploader"
+			className="bg-white border border-gray-300 rounded-md p-4"
 			onClientUploadComplete={(res) => {
 				// Do something with the response
 				console.log('Files: ', res)
