@@ -5,7 +5,7 @@ export function ImageUploader() {
 	return (
 		<UploadDropzone
 			endpoint="fileUploader"
-			className="bg-white border border-gray-300 rounded-md p-4"
+			className="bg-white border border-gray-300 rounded-md p-4 h-full"
 			onClientUploadComplete={(res) => {
 				// Do something with the response
 				console.log('Files: ', res)
