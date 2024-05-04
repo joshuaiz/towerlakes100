@@ -1,5 +1,4 @@
-import { createUploadthing, type FileRouter, UTFiles } from 'uploadthing/server'
-import { slugify, generateId } from '@utils/utils.js'
+import { createUploadthing, type FileRouter } from 'uploadthing/server'
 
 const f = createUploadthing()
 
@@ -15,25 +14,24 @@ export const ourFileRouter = {
 		text: { maxFileSize: '64MB', maxFileCount: 3 },
 	})
 		// Set permissions and file types for this FileRoute
-		.middleware(async ({ req, files }) => {
+		.middleware(async ({ req }) => {
 			// This code runs on your server before upload
-			const fileOverrides = files.map((file) => {
-				const newName = slugify(file.name)
-				const myIdentifier = generateId()
-				return { ...file, name: newName, customId: myIdentifier }
-			})
+			const user = await auth(req)
 
-			// Return userId to be used in onUploadComplete
-			return { foo: 'bar' as const, [UTFiles]: fileOverrides }
+			// If you throw, the user will not be able to upload
+			if (!user) throw new Error('Unauthorized')
+
+			// Whatever is returned here is accessible in onUploadComplete as `metadata`
+			return { userId: user.id }
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
 			// This code RUNS ON YOUR SERVER after upload
-			console.log('metadata', metadata)
+			console.log('Upload complete for userId:', metadata.userId)
 
 			console.log('file url', file.url)
 
 			// !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-			return { metadata, file: { ...file, customId: file.customId } }
+			return { uploadedBy: metadata.userId }
 		}),
 } satisfies FileRouter
 

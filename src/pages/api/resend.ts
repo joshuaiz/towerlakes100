@@ -9,17 +9,18 @@ export const POST: APIRoute = async ({ request }) => {
 	const lastname = data.get('lastname')
 	const email = data.get('email')
 	const message = data.get('message')
+	const phone = data.get('phone')
 	// Validate the data - you'll probably want to do more than this
-	if (!firstname || !email || !message) {
+	if (!firstname || !email || !phone) {
 		return new Response(
 			JSON.stringify({
-				message: 'Missing required fields',
+				message: 'Please fill out all required fields.',
 			}),
 			{ status: 400 }
 		)
 	}
 
-	let html = `Submission from ${firstname} ${lastname} (${email}):\n${message}`
+	let html = `<p>Submission from ${firstname} ${lastname} (${email}):</p><p>${message}</p>`
 
 	resend.emails.send({
 		from: 'submissions@towerlakes100.org',
