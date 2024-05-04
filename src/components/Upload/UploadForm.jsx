@@ -74,7 +74,7 @@ const UploadForm = () => {
 			setFormSubmitted(true)
 			console.log('Form submitted')
 
-			fetch('/api/sendmail.php', {
+			fetch('./api/sendmail.php', {
 				method: 'POST',
 
 				body: JSON.stringify({
