@@ -1,26 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, Fragment } from 'react'
 
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadButton } from '@utils/uploadthing.ts'
 
-export function ImageUploader() {
+export function ImageUploader({ submissionData }) {
 	const [uploading, setUploading] = useState(false)
-	const [submissionData, setSubmissionData] = useState({})
 	const [uploadComplete, setUploadComplete] = useState(false)
 
-	useEffect(() => {
-		let submissionDataFromStorage = localStorage.getItem('submissionData')
-		console.log('submissionDataFromStorage here', submissionDataFromStorage)
-		if (submissionDataFromStorage) {
-			submissionDataFromStorage = JSON.parse(submissionDataFromStorage)
-
-			console.log(
-				'submissionData in ImageUploader',
-				submissionDataFromStorage
-			)
-			setSubmissionData(submissionDataFromStorage)
-		}
-	}, [])
+	console.log('submissionData in ImageUploader', submissionData)
 
 	return (
 		<Fragment>
@@ -33,7 +20,7 @@ export function ImageUploader() {
 					// Do something with the response
 					console.log('Files: ', res)
 					setUploading(false)
-					setSubmissionData({})
+
 					localStorage.removeItem('submissionData')
 					setUploadComplete(true)
 					alert('Upload Completed')

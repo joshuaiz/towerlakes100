@@ -16,6 +16,17 @@ let islands: string[] = [
 	'Goose Egg Island',
 ]
 
+type submissionData = {
+	firstname: string
+	lastname: string
+	email: string
+	phone: string
+	submissionType: string
+	formIslands: string
+	message: string
+	submitFormId: string
+}
+
 const UploadForm = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [formSubmitted, setFormSubmitted] = useState(false)
@@ -529,7 +540,7 @@ const UploadForm = () => {
 						className={`upload-wrap p-6 bg-sunset/40 flex flex-col w-full relative`}
 					>
 						<h2 className="!mt-0 mb-2">Upload Your Files:</h2>
-						<ImageUploader />
+						<ImageUploader submissionData={submissionData} />
 					</div>
 				</div>
 			</div>
