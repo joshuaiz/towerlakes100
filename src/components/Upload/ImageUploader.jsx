@@ -1,23 +1,59 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadButton } from '@utils/uploadthing.ts'
 
 export function ImageUploader() {
 	const [uploading, setUploading] = useState(false)
+	const [submissionData, setSubmissionData] = useState({})
+	const [uploadComplete, setUploadComplete] = useState(false)
+
+	useEffect(() => {
+		let submissionDataFromStorage = localStorage.getItem('submissionData')
+		console.log('submissionDataFromStorage here', submissionDataFromStorage)
+		if (submissionDataFromStorage) {
+			submissionDataFromStorage = JSON.parse(submissionDataFromStorage)
+
+			console.log(
+				'submissionData in ImageUploader',
+				submissionDataFromStorage
+			)
+			setSubmissionData(submissionDataFromStorage)
+		}
+	}, [])
+
 	return (
 		<Fragment>
 			<UploadDropzone
 				endpoint="fileUploader"
-				className="bg-white border border-gray-300 rounded-md p-4 h-full"
+				className={`bg-white border border-gray-300 rounded-md p-4 h-full ${
+					uploading ? 'opacity-50 pointer-events-none' : ''
+				}`}
 				onClientUploadComplete={(res) => {
 					// Do something with the response
 					console.log('Files: ', res)
 					setUploading(false)
+					setSubmissionData({})
+					localStorage.removeItem('submissionData')
+					setUploadComplete(true)
 					alert('Upload Completed')
+					setTimeout(function () {
+						window.location.reload(1)
+					}, 3000)
 				}}
 				onUploadError={(error) => {
 					alert(`ERROR! ${error.message}`)
+				}}
+				onBeforeUploadBegin={(files) => {
+					let formId = submissionData.submitFormId
+
+					console.log('formId before upload', formId)
+					return files.map(
+						(f) =>
+							new File([f], formId + '-' + f.name, {
+								type: f.type,
+							})
+					)
 				}}
 				onUploadBegin={(name) => {
 					// Do something once upload begins
@@ -26,12 +62,31 @@ export function ImageUploader() {
 				}}
 			/>
 
+			<div className="flex justify-center">
+				<p className="prose">
+					<strong>Note:</strong> after selecting or
+					dragging-and-dropping your file(s) click the Upload button
+					above to complete the upload.
+				</p>
+			</div>
+
 			{uploading && (
-				<div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-					<div className="bg-white p-4 rounded-md">
+				<div className="w-full h-full bg-black bg-opacity-50 flex items-center justify-center p-12">
+					<div className="bg-white p-4 rounded-md max-w-[400px]">
 						<p>
 							Uploading... Please do not leave this page or use
 							the back button until uploading is complete.
+						</p>
+					</div>
+				</div>
+			)}
+
+			{uploadComplete && (
+				<div className="absolute top-0 left-0 mx-auto w-full h-full bg-black bg-opacity-50 flex items-center justify-center p-12">
+					<div className="bg-white p-4 rounded-md max-w-[400px]">
+						<p className="text-center">
+							Upload Complete! Please wait while we redirect you
+							back to the form.
 						</p>
 					</div>
 				</div>

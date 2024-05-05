@@ -8,10 +8,15 @@ import { ImageUploader } from '@components/Upload/ImageUploader.jsx'
 <MainLayout title="Tower Lakes 100">
 	<PageWrap bg="bg-floral-white" width="extra-wide" title="Home">
 		<article class="prose extra-wide">
-			<header class="page-header mt-6">
+			<header class="page-header mt-6 prose">
 				<h1 class="font-bold text-3xl lg:text-4xl">Tower Lakes 100</h1>
 			</header>
-			<p>Welcome to the Tower Lakes 100 website.</p>
+			<p class="prose">
+				Welcome to the Tower Lakes 100 website. This site will be
+				updated with more information about the TL100 Yearbook Project
+				so please check back regularly.
+			</p>
+
 			<UploadForm client:load />
 		</article>
 	</PageWrap>

@@ -5,6 +5,7 @@ import {
 	isValidPhone,
 	shuffleArray,
 	slugify,
+	get6RandomChars,
 } from '@utils/utils.js'
 
 let islands: string[] = [
@@ -40,6 +41,8 @@ const UploadForm = () => {
 		islands: false,
 	})
 
+	const [formId, setFormId] = useState('')
+
 	const [submissionData, setSubmissionData] = useState({})
 
 	const handleSelectChange = (e) => {
@@ -52,11 +55,17 @@ const UploadForm = () => {
 		setRadioValue(e.target.value)
 	}
 
+	let newFormId = get6RandomChars()
+
 	useEffect(() => {
 		setFormSubmitted(false)
 		setRadioValue('')
 		islands = shuffleArray(islands)
 		setFormIslands(islands)
+		const newFormId = get6RandomChars()
+		console.log('newFormId', newFormId)
+		setFormId(newFormId)
+		localStorage.removeItem('submissionData')
 	}, [])
 
 	const submitForm = async (e: FormEvent<HTMLFormElement>) => {
@@ -85,6 +94,7 @@ const UploadForm = () => {
 		const submissionType = formData.get('submissionType')
 		const formIslands = formData.get('islands')
 		const message = formData.get('message')
+		const submitFormId = formData.get('formId')
 
 		if (typeof firstname !== 'string' || firstname.length < 1) {
 			setFormErrors({
@@ -182,10 +192,25 @@ const UploadForm = () => {
 				submissionType,
 				formIslands,
 				message,
+				submitFormId,
 			})
 
+			localStorage.setItem(
+				'submissionData',
+				JSON.stringify({
+					firstname,
+					lastname,
+					email,
+					phone,
+					submissionType,
+					formIslands,
+					message,
+					submitFormId,
+				})
+			)
+
 			setIsSubmitting(true)
-			console.log('Form submitted')
+			console.log('Form submitted', submitFormId)
 
 			const response = await fetch('/api/resend', {
 				method: 'POST',
@@ -211,7 +236,7 @@ const UploadForm = () => {
 	}
 
 	return (
-		<div className="upload-form-outer mb-12 relative">
+		<div className="upload-form-outer mb-12 relative p-4 lg:p-12 bg-carribbean/10 rounded rounded-4">
 			<div className="upload-form-inner prose flex flex-wrap lg:flex-nowrap gap-x-8">
 				<div className="instructions w-full lg:w-1/2">
 					<h2 className="!mt-0">
@@ -300,7 +325,9 @@ const UploadForm = () => {
 						className="flex flex-col"
 						id="submissionForm"
 					>
-						<div className={`form-wrap flex gap-x-4 w-full`}>
+						<div
+							className={`form-wrap flex gap-x-4 w-full flex-wrap lg:flex-nowrap`}
+						>
 							<label
 								className="w-full lg:w-1/2"
 								htmlFor="firstname"
@@ -326,7 +353,7 @@ const UploadForm = () => {
 								/>
 							</label>
 						</div>
-						<div className="form-wrap flex gap-x-4 w-full">
+						<div className="form-wrap flex gap-x-4 w-full flex-wrap lg:flex-nowrap">
 							<label className="w-full lg:w-1/2" htmlFor="email">
 								Email:
 								<input
@@ -403,7 +430,7 @@ const UploadForm = () => {
 									Please select the island that{' '}
 									<strong>is not</strong> part of Tower Lakes:
 								</legend>
-								<div className="flex items-center gap-x-4 w-full">
+								<div className="flex items-start lg:items-center gap-x-4 w-full flex-wrap lg:flex-nowrap flex-col lg:flex-row">
 									{formIslands.map((island, index) => (
 										<div
 											key={island}
@@ -442,22 +469,31 @@ const UploadForm = () => {
 									id="message"
 									name="message"
 									rows={4}
+									maxLength={1000}
 								></textarea>
 								<p className="text-xs text-slate-green not-prose">
 									Please describe the photos you are
 									uploading. Include any relevant details,
 									such as event names, dates, and people in
-									the photos.
+									the photos. (1000 character limit)
 								</p>
 								<p className="text-xs text-slate-green not-prose">
 									<strong>Note:</strong> you may also upload a
 									document with this info using the uploader
 									(PDF, DOC, DOCX, TXT, RTF, XLS, or CSV file
-									types allowed). Uploader will be available
-									after form is submitted.
+									types allowed). Or include the document in
+									your .zip archive. Uploader will be
+									available after form is submitted.
 								</p>
 							</label>
 						</div>
+
+						<input
+							type="hidden"
+							id="formId"
+							name="formId"
+							value={formId}
+						/>
 
 						<div className="form-submit w-full flex flex-col items-center justify-center">
 							<button
@@ -490,7 +526,7 @@ const UploadForm = () => {
 					}`}
 				>
 					<div
-						className={`upload-wrap p-6 bg-sunset/40 flex flex-col w-full `}
+						className={`upload-wrap p-6 bg-sunset/40 flex flex-col w-full relative`}
 					>
 						<h2 className="!mt-0 mb-2">Upload Your Files:</h2>
 						<ImageUploader />

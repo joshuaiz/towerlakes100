@@ -54,3 +54,77 @@ export function shuffleArray(array) {
 	}
 	return array
 }
+
+export function get6RandomChars() {
+	var chars = [
+		'1',
+		'2',
+		'3',
+		'4',
+		'5',
+		'6',
+		'7',
+		'8',
+		'9',
+		'a',
+		'b',
+		'c',
+		'd',
+		'e',
+		'f',
+		'g',
+		'h',
+		'i',
+		'j',
+		'k',
+		'l',
+		'm',
+		'n',
+		'o',
+		'p',
+		'q',
+		'r',
+		's',
+		't',
+		'u',
+		'v',
+		'w',
+		'x',
+		'y',
+		'z',
+		'A',
+		'B',
+		'C',
+		'D',
+		'E',
+		'F',
+		'G',
+		'H',
+		'I',
+		'J',
+		'K',
+		'L',
+		'M',
+		'N',
+		'P',
+		'Q',
+		'R',
+		'S',
+		'T',
+		'U',
+		'V',
+		'W',
+		'X',
+		'Y',
+		'Z',
+	]
+
+	var char1 = chars[Math.floor(Math.random() * 36)]
+	var char2 = chars[Math.floor(Math.random() * 36)]
+	var char3 = chars[Math.floor(Math.random() * 36)]
+	var char4 = chars[Math.floor(Math.random() * 36)]
+	var char5 = chars[Math.floor(Math.random() * 36)]
+	var char6 = chars[Math.floor(Math.random() * 36)]
+
+	return '' + char1 + char2 + char3 + char4 + char5 + char6
+}

@@ -10,6 +10,7 @@ export const POST: APIRoute = async ({ request }) => {
 	const email = data.get('email')
 	const message = data.get('message')
 	const phone = data.get('phone')
+	const formId = data.get('formId')
 	// Validate the data - you'll probably want to do more than this
 	if (!firstname || !email || !phone) {
 		return new Response(
@@ -20,12 +21,20 @@ export const POST: APIRoute = async ({ request }) => {
 		)
 	}
 
-	let html = `<p>Submission from ${firstname} ${lastname} (${email}):</p><p>${message}</p>`
+	let html = `<p>Submission ${formId} from ${firstname} ${lastname} (${email})</p>`
+
+	html += `<p>Name: ${firstname} ${lastname}</p>`
+
+	html += `<p>Email: ${email}</p>`
+
+	html += `<p>Phone: ${phone}</p>`
+
+	html += `<p>Message: ${message}</p>`
 
 	resend.emails.send({
 		from: 'submissions@towerlakes100.org',
 		to: 'tl@towerlakes100.org',
-		subject: 'New submission from Tower Lakes 100 website',
+		subject: `New submission from Tower Lakes 100 website - ${formId}`,
 		html: html,
 	})
 	// Do something with the data, then return a success response
