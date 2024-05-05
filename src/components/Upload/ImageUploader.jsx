@@ -37,9 +37,9 @@ export function ImageUploader() {
 					localStorage.removeItem('submissionData')
 					setUploadComplete(true)
 					alert('Upload Completed')
-					setTimeout(function () {
-						window.location.reload(1)
-					}, 3000)
+					// setTimeout(function () {
+					// 	window.location.reload(1)
+					// }, 3000)
 				}}
 				onUploadError={(error) => {
 					alert(`ERROR! ${error.message}`)
@@ -48,6 +48,9 @@ export function ImageUploader() {
 					let formId = submissionData.submitFormId
 
 					console.log('formId before upload', formId)
+					if (!formId || formId === '' || formId === 'undefined') {
+						formId = 'default'
+					}
 					return files.map(
 						(f) =>
 							new File([f], formId + '-' + f.name, {
