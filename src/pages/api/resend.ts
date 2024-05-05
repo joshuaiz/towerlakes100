@@ -54,12 +54,12 @@ export const POST: APIRoute = async ({ request }) => {
 		html: html,
 	})
 
-	// resend.emails.send({
-	// 	from: 'submissions@towerlakes100.org',
-	// 	to: `${email}`,
-	// 	subject: `Thank you for submitting on the Tower Lakes 100 website`,
-	// 	html: html2,
-	// })
+	resend.emails.send({
+		from: 'submissions@towerlakes100.org',
+		to: `${email}`,
+		subject: `Thank you for submitting on the Tower Lakes 100 website`,
+		html: html2,
+	})
 	// Do something with the data, then return a success response
 	return new Response(
 		JSON.stringify({
