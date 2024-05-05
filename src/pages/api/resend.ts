@@ -31,11 +31,34 @@ export const POST: APIRoute = async ({ request }) => {
 
 	html += `<p>Message: ${message}</p>`
 
+	let html2 = `<p>Thank you for submitting on the Tower Lakes 100 website</p>`
+
+	html2 += `<p>Your submission ${formId} has been received</p>`
+
+	html2 += `<p>Name: ${firstname} ${lastname}</p>`
+
+	html2 += `<p>Email: ${email}</p>`
+
+	html2 += `<p>Phone: ${phone}</p>`
+
+	html2 += `<p>Message: ${message}</p>`
+
+	html2 += `<p>If we have any questions about your submission we will contact you. If you have any questions, please email: <a href="mailto:yearbook@towerlakes100.org">yearbook@towerlakes100.org</a>.</p>`
+
+	html2 += `<p>Thank you for your submission!</p>`
+
 	resend.emails.send({
 		from: 'submissions@towerlakes100.org',
 		to: 'tl@towerlakes100.org',
 		subject: `New submission from Tower Lakes 100 website - ${formId}`,
 		html: html,
+	})
+
+	resend.emails.send({
+		from: 'submissions@towerlakes100.org',
+		to: `${email}`,
+		subject: `Thank you for submitting on the Tower Lakes 100 website`,
+		html: html2,
 	})
 	// Do something with the data, then return a success response
 	return new Response(

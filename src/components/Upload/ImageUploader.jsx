@@ -85,8 +85,8 @@ export function ImageUploader() {
 				<div className="absolute top-0 left-0 mx-auto w-full h-full bg-black bg-opacity-50 flex items-center justify-center p-12">
 					<div className="bg-white p-4 rounded-md max-w-[400px]">
 						<p className="text-center">
-							Upload Complete! Please wait while we redirect you
-							back to the form.
+							Upload Complete! Thanks for your submission. Please
+							wait while we redirect you back to the form.
 						</p>
 					</div>
 				</div>
