@@ -24,9 +24,9 @@ export function ImageUploader({ submissionData }) {
 					localStorage.removeItem('submissionData')
 					setUploadComplete(true)
 					alert('Upload Completed')
-					// setTimeout(function () {
-					// 	window.location.reload(1)
-					// }, 3000)
+					setTimeout(function () {
+						window.location.reload(1)
+					}, 3000)
 				}}
 				onUploadError={(error) => {
 					alert(`ERROR! ${error.message}`)
