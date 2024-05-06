@@ -511,7 +511,7 @@ const UploadForm = () => {
 								type="submit"
 								className="btn bg-carribbean w-full hover:bg-jungle text-lg lg:text-2xl uppercase tracking-wide"
 							>
-								Submit Form
+								Submit Form + Proceed To Upload
 							</button>
 							<p className="text-xs text-slate-green not-prose">
 								Once you submit the form, you will be able to
