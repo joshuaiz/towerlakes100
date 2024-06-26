@@ -6,18 +6,25 @@ import { ImageUploader } from '@components/Upload/ImageUploader.jsx'
 ---
 
 <MainLayout title="Tower Lakes 100">
-	<PageWrap bg="bg-floral-white" width="extra-wide" title="Home">
-		<article class="prose extra-wide">
-			<header class="page-header mt-6 prose">
-				<h1 class="font-bold text-3xl lg:text-4xl">Tower Lakes 100</h1>
-			</header>
-			<p class="prose">
-				Welcome to the Tower Lakes 100 website. This site will be
-				updated with more information about the TL100 Yearbook Project
-				so please check back regularly.
-			</p>
-
-			<UploadForm client:only="react" />
-		</article>
-	</PageWrap>
+    <PageWrap bg="bg-floral-white" width="extra-wide" title="Home">
+        <article class="prose extra-wide">
+            <header class="page-header mt-6 prose">
+                <h1 class="font-bold text-3xl lg:text-4xl">Tower Lakes 100</h1>
+            </header>
+            <p class="prose">
+                Welcome to the Tower Lakes 100 website. This site will be
+                updated with more information about the TL100 Yearbook Project
+                so please check back regularly.
+            </p>
+            <p>
+                Please submit any photos that you have of Tower Lakes events,
+                recreation, history, etc. The more community members pictured,
+                the better! Please bear in mind that we cannot guarantee that
+                your photos/family can be included, though we hope to represent
+                all of our neighbors. If you are interested in guaranteeing that
+                your family is pictured, consider buying a family ad spot!
+            </p>
+            <UploadForm client:only="react" />
+        </article>
+    </PageWrap>
 </MainLayout>
