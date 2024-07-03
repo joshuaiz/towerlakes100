@@ -3,15 +3,24 @@ import TL100Logo from '@images/tower-lakes-100-horiz-lockup.svg'
 ---
 
 <div class="header-outer bg-timberwolf/50 content-grid">
-	<div class="header-inner extra-wide py-3">
-		<div class="header-logo">
-			<a href="/">
-				<img
-					class="w-[300px]"
-					src={TL100Logo.src}
-					alt="Tower Lakes 100 logo"
-				/>
-			</a>
-		</div>
-	</div>
+    <div class="header-inner extra-wide py-3 flex items-center flex-start">
+        <div class="header-logo mr-10">
+            <a href="/">
+                <img
+                    class="w-[300px]"
+                    src={TL100Logo.src}
+                    alt="Tower Lakes 100 logo"
+                />
+            </a>
+        </div>
+        <div class="header-nav">
+            <nav class="nav-menu">
+                <ul class="flex items-center gap-x-6">
+                    <li>
+                        <a class="font-bold text-primary" href="/faq">FAQ</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 </div>

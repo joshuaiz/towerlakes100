@@ -16,6 +16,59 @@ let islands: string[] = [
     'Alcatraz Island',
 ]
 
+let submissionTypes = [
+    {
+        History: [
+            'Old/New comparison pictures of houses',
+            'Islands/dam pictures',
+            'Aerial photos',
+            'Other historical photos',
+        ],
+    },
+    {
+        Nature: [
+            'Natural beauty of Tower Lakes',
+            'Scenic views',
+            'Flora and fauna',
+        ],
+    },
+    {
+        'Events/Activities': [
+            'Bowling',
+            "St. Patrick's Day",
+            'Easter Egg Hunt',
+            'Community Cleanup Days',
+            'Planting Days',
+            'Progressive Dinner',
+            'Beach Open/Swim',
+            'Fourth of July',
+            'Summer Events',
+            'Pickleball/Tennis',
+            'Golf Outing',
+            'Trivia',
+            'Gazebo/Live Music',
+            'Chili Cookoff',
+            'Halloween',
+            'Turkey Trot',
+            'Christmas',
+            'Santa/Sleigh Ride',
+            'Holiday House Decorations',
+            'Other events/Activities',
+        ],
+    },
+    {
+        'Family/People': [
+            'Family photos',
+            'People of Tower Lakes',
+            'Kids',
+            'Pets',
+            'Other family/people photos',
+        ],
+    },
+
+    { Other: ['Other'] },
+]
+
 type submissionData = {
     firstname: string
     lastname: string
@@ -40,7 +93,7 @@ const UploadForm = () => {
         islands: '',
     })
 
-    const [selectValue, setSelectValue] = useState('default')
+    const [submissionTypeValues, setSubmissionTypeValues] = useState([])
     const [formIslands, setFormIslands] = useState([])
     const [radioValue, setRadioValue] = useState('')
     const [isFilled, setIsFilled] = useState({
@@ -56,9 +109,9 @@ const UploadForm = () => {
 
     const [submissionData, setSubmissionData] = useState({})
 
-    const handleSelectChange = (e) => {
-        console.log('select change', e.target.value)
-        setSelectValue(e.target.value)
+    const handleTypeChange = (e) => {
+        console.log('type change', e.target.value)
+        setSubmissionTypeValues([...submissionTypeValues, e.target.value])
     }
 
     const onRadioChange = (e) => {
@@ -79,10 +132,16 @@ const UploadForm = () => {
         localStorage.removeItem('submissionData')
     }, [])
 
-    const submitForm = async (e: FormEvent<HTMLFormElement>) => {
+    const submitForm = async (e: SubmitEvent) => {
         e.preventDefault()
 
+        console.log('submitForm', e.target)
+
         const formData = new FormData(e.target as HTMLFormElement)
+
+        console.log('formData', formData)
+
+        console.log('submissionTypeValues in submit', submissionTypeValues)
 
         // formData.forEach((value, key) => {
         // 	console.log('key', key)
@@ -102,7 +161,7 @@ const UploadForm = () => {
         const lastname = formData.get('lastname')
         const email = formData.get('email')
         const phone = formData.get('phone')
-        const submissionType = formData.get('submissionType')
+        const submissionType = submissionTypeValues.join(', ')
         const formIslands = formData.get('islands')
         const message = formData.get('message')
         const submitFormId = formData.get('formId')
@@ -136,25 +195,25 @@ const UploadForm = () => {
             })
         }
 
-        if (
-            typeof submissionType !== 'string' ||
-            submissionType.length < 1 ||
-            submissionType === 'default' ||
-            submissionType === '' ||
-            submissionType === null ||
-            submissionType === undefined
-        ) {
-            setFormErrors({
-                ...formErrors,
-                submissionType: 'Please select a submission type.',
-            })
+        // if (
+        //     typeof submissionType !== 'string' ||
+        //     submissionType.length < 1 ||
+        //     submissionType === 'default' ||
+        //     submissionType === '' ||
+        //     submissionType === null ||
+        //     submissionType === undefined
+        // ) {
+        //     setFormErrors({
+        //         ...formErrors,
+        //         submissionType: 'Please select a submission type.',
+        //     })
 
-            console.log(
-                'submissionType error',
-                submissionType,
-                formErrors.submissionType
-            )
-        }
+        //     console.log(
+        //         'submissionType error',
+        //         submissionType,
+        //         formErrors.submissionType
+        //     )
+        // }
 
         if (
             typeof formIslands !== 'string' ||
@@ -221,7 +280,11 @@ const UploadForm = () => {
             )
 
             setIsSubmitting(true)
-            console.log('Form submitted', submitFormId)
+            console.log(
+                'Form submitted, submitFormId, formData',
+                submitFormId,
+                formData
+            )
 
             const response = await fetch('/api/resend', {
                 method: 'POST',
@@ -253,17 +316,13 @@ const UploadForm = () => {
                     <h2 className="!mt-0">
                         Tower Lakes 100 Yearbook Upload & Submission Form
                     </h2>
-                    <p className="not-prose">
-                        Use this form to upload any of the following:
+                    <p>
+                        Please see the{' '}
+                        <a className="text-primary underline" href="/faq">
+                            FAQ
+                        </a>{' '}
+                        for detailed submission guidelines.
                     </p>
-                    <ul>
-                        <li>Yearbook Cover Contest</li>
-                        <li>Seasonal Photos</li>
-                        <li>
-                            Other photos to be considered for the TL 100
-                            Yearbook
-                        </li>
-                    </ul>
                     <h3>Important notes:</h3>
                     <ul>
                         <li>
@@ -279,8 +338,16 @@ const UploadForm = () => {
                             resize
                         </li>
                         <li>
-                            File types allowed: .jpg, .png, .pdf, .webp, .heic,
-                            .avif, .tiff, CAMERA RAW, .zip
+                            Image file types allowed: .jpg, .png, .pdf, .webp,
+                            .heic, .avif, .tiff, CAMERA RAW, .zip
+                        </li>
+                        <li>
+                            Document file types allowed: .doc, .docx, .pdf,
+                            .txt, .rtf, .xls, .xlsx, .csv
+                        </li>
+                        <li>
+                            To include more details about your photos, you can
+                            include a document with your submission
                         </li>
                         <li>You *can* upload multiple files at one time</li>
                         <li>Max file size per upload is 1024MB (1GB)</li>
@@ -386,44 +453,55 @@ const UploadForm = () => {
                             </label>
                         </div>
 
-                        <label className={`my-6`} htmlFor="submissionType">
-                            Submission Type:
-                            <select
-                                id="submissionType"
-                                className={`select select-bordered ${
-                                    formErrors.submissionType
-                                        ? 'border border-red-500'
-                                        : ''
-                                }`}
-                                name="submissionType"
-                                required
-                                value={selectValue}
-                                onChange={handleSelectChange}
-                            >
-                                <option value="default" disabled>
-                                    Select type
-                                </option>
-                                <option value="Cover Content">
-                                    Yearbook Cover Contest
-                                </option>
-                                <option value="Seasonal Photos">
-                                    Seasonal Photos
-                                </option>
-                                <option value="Other">
-                                    Other Photos/Images
-                                </option>
-                            </select>
-                            <p className="text-xs text-slate-green not-prose ">
-                                Only upload images for one type per upload. If
-                                you have multiple groups of photos for different
-                                types, please make one upload for each group.
-                                This helps us keep organized!
-                            </p>
-                            {formErrors.submissionType ? (
-                                <p className="text-red-500 !my-0 mt-2 font-semibold">
-                                    {formErrors.submissionType}
-                                </p>
-                            ) : null}
+                        <label className={`mt-6`} htmlFor="submissionType">
+                            <span className="font-bold text-3xl mb-4 block">
+                                Submission Categories:
+                            </span>
+                            <div className="">
+                                {submissionTypes.map((type, index) => {
+                                    return (
+                                        <fieldset className="flex items-center flex-wrap mb-4">
+                                            <legend className="text-lg lg:text-xl font-bold">
+                                                {Object.keys(type)}
+                                            </legend>
+                                            {Object.values(type)[0].map(
+                                                (subtype, index) => {
+                                                    return (
+                                                        <div
+                                                            key={subtype}
+                                                            className="flex items-center"
+                                                        >
+                                                            <input
+                                                                className="mr-1"
+                                                                type="checkbox"
+                                                                id={slugify(
+                                                                    subtype
+                                                                )}
+                                                                name="submissionType"
+                                                                value={subtype}
+                                                                onChange={
+                                                                    handleTypeChange
+                                                                }
+                                                                checked={submissionTypeValues.includes(
+                                                                    subtype
+                                                                )}
+                                                            />
+                                                            <label
+                                                                className="mr-4"
+                                                                htmlFor={
+                                                                    subtype
+                                                                }
+                                                            >
+                                                                {subtype}
+                                                            </label>
+                                                        </div>
+                                                    )
+                                                }
+                                            )}
+                                        </fieldset>
+                                    )
+                                })}
+                            </div>
                         </label>
 
                         <div className="form-wrap flex flex-col w-full mb-6">
