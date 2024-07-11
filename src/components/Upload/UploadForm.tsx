@@ -133,6 +133,19 @@ const UploadForm = () => {
         localStorage.removeItem('submissionData')
     }, [])
 
+    useEffect(() => {
+        document
+            .getElementById('phone')
+            .addEventListener('input', function (e) {
+                var x = e.target.value
+                    .replace(/\D/g, '')
+                    .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+                e.target.value = !x[2]
+                    ? x[1]
+                    : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '')
+            })
+    }, [])
+
     const submitForm = async (e: SubmitEvent) => {
         e.preventDefault()
 
@@ -443,13 +456,14 @@ const UploadForm = () => {
                                 />
                             </label>
                             <label className="w-full lg:w-1/2" htmlFor="phone">
-                                Phone:&nbsp;<small>Format: 123-456-7890</small>
+                                Phone:&nbsp;
+                                <small>Format: (312) 555-1234</small>
                                 <input
                                     type="tel"
                                     id="phone"
                                     name="phone"
                                     required
-                                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                    placeholder="(312) 555-1234"
                                 />
                             </label>
                         </div>
