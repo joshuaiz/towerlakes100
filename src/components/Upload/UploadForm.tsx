@@ -624,7 +624,7 @@ const UploadForm = () => {
                 )}
 
                 <div
-                    className={`upload-outer flex flex-col gap-y-6 w-1/2 ${
+                    className={`upload-outer flex flex-col gap-y-6 lg:w-1/2 ${
                         formSubmitted ? '' : 'hidden'
                     }`}
                 >
