@@ -456,8 +456,7 @@ const UploadForm = () => {
                                 />
                             </label>
                             <label className="w-full lg:w-1/2" htmlFor="phone">
-                                Phone:&nbsp;
-                                <small>Format: (312) 555-1234</small>
+                                Phone:
                                 <input
                                     type="tel"
                                     id="phone"
