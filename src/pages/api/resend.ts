@@ -53,7 +53,13 @@ export const POST: APIRoute = async ({ request }) => {
 
     html2 += `<p>If we have any questions about your submission we will contact you. If you have any questions, please email: <a href="mailto:yearbook@towerlakes100.org">yearbook@towerlakes100.org</a>.</p>`
 
-    html2 += `<p>Thank you for your submission!</p>`
+    html2 += `<p>Thank you for your submission!</p><br />`
+
+    html2 += `<hr />`
+
+    html2 += `<h2><a href="https://www.lakesidewoodworking.net/member-site-homepage-1">Purchase a Tower Lakes 100 Yearbook!</a></h2>`
+
+    html2 += `<p>TL100 Yearbooks may be purchased <a href="https://www.lakesidewoodworking.net/member-site-homepage-1">here</a>.</p>`
 
     await resend.emails.send({
         from: 'submissions@towerlakes100.org',

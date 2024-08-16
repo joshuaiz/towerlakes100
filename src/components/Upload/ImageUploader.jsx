@@ -79,9 +79,6 @@ export function ImageUploader({ submissionData }) {
                             </li>
                         ))}
                     </ul>
-                    <p>
-                        Please click the Upload button above to start uploading.
-                    </p>
                 </div>
             )}
 

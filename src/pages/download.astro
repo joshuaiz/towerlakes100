@@ -1,0 +1,98 @@
+---
+import MainLayout from '@layouts/MainLayout.astro'
+import PageWrap from '@layouts/PageWrap.astro'
+
+import files from '@files/Bob_Covek_krgts8_2024-08-12.json'
+
+const utUrl = 'https://utfs.io/f/'
+---
+
+<MainLayout title="Tower Lakes 100 - Upload Thing Downloads">
+    <PageWrap bg="bg-floral-white" width="extra-wide" title="Download Files">
+        <div class="downloads-outer py-12">
+            <div class="downloads-inner">
+                <h2 class="text-2xl lg:text-3xl font-bold mb-3">File List</h2>
+                <ul>
+                    {
+                        files.map((file, index) => (
+                            <li>
+                                <>
+                                    <span class="text-base">{file.name}</span>
+                                    <br />
+                                </>
+                                <>
+                                    <span
+                                        class="text-sm file-url"
+                                        data-file={utUrl + file.key}
+                                    >
+                                        {utUrl + file.key}
+                                    </span>
+                                    <br />
+                                </>
+                            </li>
+                        ))
+                    }
+                </ul>
+                <div class="download-button my-6" id="download-button">
+                    <button
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/50 active:hover:bg-primary/50"
+                    >
+                        Download All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </PageWrap>
+</MainLayout>
+
+<script>
+    import files from '@files/Bob_Covek_krgts8_2024-08-12.json'
+
+    const utUrl = 'https://utfs.io/f/'
+
+    // console.log('files', files)
+
+    let fileUrls = files.map((file) => {
+        return utUrl + file.key
+    })
+
+    // console.log('fileUrls', fileUrls)
+
+    document.addEventListener('DOMContentLoaded', function (event) {
+        const downloadButton = document.getElementById('download-button')
+        downloadButton.addEventListener('click', function (event) {
+            function downloadAll() {
+                for (var i = 0; i < fileUrls.length; i++) {
+                    forceDownload(fileUrls[i], files[i].name)
+                }
+            }
+            downloadAll()
+        })
+    })
+
+    function forceDownload(url, fileName) {
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', url, true)
+        xhr.responseType = 'blob'
+        xhr.onload = function () {
+            var urlCreator = window.URL || window.webkitURL
+            var imageUrl = urlCreator.createObjectURL(this.response)
+            var tag = document.createElement('a')
+            tag.href = imageUrl
+            tag.download = fileName
+            document.body.appendChild(tag)
+            tag.click()
+            document.body.removeChild(tag)
+        }
+        xhr.send()
+    }
+
+    function sleep(milliseconds) {
+        var start = new Date().getTime()
+        for (var i = 0; i < 1e7; i++) {
+            if (new Date().getTime() - start > milliseconds) {
+                break
+            }
+        }
+    }
+</script>

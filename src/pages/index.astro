@@ -2,7 +2,6 @@
 import MainLayout from '@layouts/MainLayout.astro'
 import PageWrap from '@layouts/PageWrap.astro'
 import UploadForm from '@components/Upload/UploadForm.tsx'
-import { ImageUploader } from '@components/Upload/ImageUploader.jsx'
 ---
 
 <MainLayout title="Tower Lakes 100">
@@ -16,7 +15,7 @@ import { ImageUploader } from '@components/Upload/ImageUploader.jsx'
                     updated with more information about the TL100 Yearbook
                     Project so please check back regularly.
                 </p>
-                <p>
+                <p class="prose">
                     Please submit any photos that you have of Tower Lakes
                     events, recreation, history, etc. The more community members
                     pictured, the better! Please bear in mind that we cannot
@@ -25,6 +24,20 @@ import { ImageUploader } from '@components/Upload/ImageUploader.jsx'
                     interested in guaranteeing that your family is pictured,
                     consider buying a family ad spot!
                 </p>
+
+                <h2 class="!mt-0">Purchase a Tower Lakes 100 Yearbook!</h2>
+
+                <div class="my-6">
+                    <a
+                        href="https://www.lakesidewoodworking.net/member-site-homepage-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/50 active:hover:bg-primary/50 no-underline"
+                    >
+                        Purchase Yearbook
+                    </a>
+                </div>
+
                 <UploadForm client:only="react" />
             </header>
         </article>
